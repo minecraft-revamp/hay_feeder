@@ -57,11 +57,6 @@ jar {
     from("LICENSE") { rename { "${it}_${project.base.archivesName.get()}" } }
 }
 
-// Resource validator — wired onto `check`. See tests/validate.py.
-tasks.register('validateResources', Exec) {
-    description = 'Lint resources (JSON, lang, pack.mcmeta, palettes) via Python'
-    group = 'verification'
-    workingDir = rootProject.file('..')
-    commandLine 'python3', 'tests/validate.py', projectDir.absolutePath
-}
-tasks.named('check').configure { dependsOn 'validateResources' }
+// Resource validator hook reserved: buckets_update's tests/validate.py is
+// hardcoded to that mod's namespace, so it is not vendored here. Re-wire a
+// validateResources task once the linter supports an arbitrary mod_id.
