@@ -38,3 +38,9 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### FML JUnit run transients (testJunit working dir defaults to project root) ###
+/.cache/
+/config/
+/logs/
+/crash-reports/

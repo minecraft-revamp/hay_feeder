@@ -85,6 +85,16 @@ runs {
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
         arguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
+
+    // JUnit run wiring: NeoForge ships a "junit" run type that boots the FML
+    // loader before tests so MC classes (Items, Blocks, BuiltInRegistries...)
+    // can be touched from JUnit. Without this, accessing Items.WHEAT triggers
+    // "Not bootstrapped" via BuiltInRegistries.<clinit>.
+    junit {
+        runType 'junit'
+        modSource project.sourceSets.main
+        unitTestSource project.sourceSets.test
+    }
 }
 
 // Sets up a dependency configuration called 'localRuntime'.
@@ -136,8 +146,17 @@ dependencies {
     testRuntimeOnly "net.neoforged:neoforge:${neo_version}"
 }
 
+// We don't use the default `test` task: NeoForge unit tests must run under
+// the `testJunit` runner (NeoGradle "junit" run type), which boots FML so
+// vanilla MC classes (Items, Blocks, BuiltInRegistries) can be referenced.
+// Disable `test` to avoid duplicate / failing runs, and route `check`/`build`
+// through `testJunit`.
 test {
-    useJUnitPlatform()
+    enabled = false
+}
+
+tasks.named('check') {
+    dependsOn 'testJunit'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
