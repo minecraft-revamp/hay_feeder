@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:hay_block"
+  ],
+  "result": {
+    "id": "hay_feeder:hay_feeder",
+    "count": 1
+  }
+}
