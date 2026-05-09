@@ -12,6 +12,7 @@ public class HayFeederFabric implements ModInitializer {
     public void onInitialize() {
         ModBlocks.bootstrap();
         ModItems.bootstrap();
+        ModBlockEntities.bootstrap();
         ModCreativeTabs.bootstrap();
 
         LOGGER.info("Hay Feeder (Fabric) initialised");
