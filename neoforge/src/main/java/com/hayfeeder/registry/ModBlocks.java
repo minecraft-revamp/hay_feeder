@@ -13,7 +13,7 @@ public final class ModBlocks {
     public static final DeferredBlock<HayFeederBlock> HAY_FEEDER = BLOCKS.registerBlock(
             "hay_feeder",
             HayFeederBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.HAY_BLOCK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.HAY_BLOCK));
 
     private ModBlocks() {}
 }
