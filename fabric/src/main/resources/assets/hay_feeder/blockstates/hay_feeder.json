@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "feeds_left=0": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=1": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=2": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=3": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=4": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=5": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=6": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=7": { "model": "hay_feeder:block/hay_feeder" },
+    "feeds_left=8": { "model": "hay_feeder:block/hay_feeder" }
+  }
+}

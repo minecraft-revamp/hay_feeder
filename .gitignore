@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+**/build/
+!**/src/**/build/
+!gradle/wrapper/gradle-wrapper.jar
+**/run/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.vscode/
+.eclipse/
+.classpath
+.project
+.settings/
+.apt_generated/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# JDK tarballs (we keep them in ~/.local/jdks, never commit)
+*.tar.gz
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/

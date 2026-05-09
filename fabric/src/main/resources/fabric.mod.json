@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "Hay Feeder — drop a hay bale near wheat-eating animals (cows, sheep, horses) and they auto-feed from it. The bale depletes over time.",
+  "authors": ["JessicaMalle"],
+  "license": "All Rights Reserved",
+
+  "environment": "*",
+  "entrypoints": {
+    "main":   ["com.hayfeeder.fabric.HayFeederFabric"],
+    "client": ["com.hayfeeder.fabric.client.HayFeederFabricClient"]
+  },
+
+  "depends": {
+    "fabricloader":  ">=${loader_version}",
+    "fabric-api":    "*",
+    "minecraft":     "${minecraft_version}",
+    "java":          ">=25"
+  }
+}
