@@ -1,5 +1,6 @@
 package com.hayfeeder;
 
+import com.hayfeeder.registry.ModBlockEntities;
 import com.hayfeeder.registry.ModBlocks;
 import com.hayfeeder.registry.ModCreativeTabs;
 import com.hayfeeder.registry.ModItems;
@@ -17,6 +18,7 @@ public class HayFeeder {
     public HayFeeder(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         LOGGER.info("Hay Feeder initialised");
