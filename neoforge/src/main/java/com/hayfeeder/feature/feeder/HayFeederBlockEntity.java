@@ -17,6 +17,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,6 +33,7 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
     public static final double FEED_RADIUS = 6.0;
 
     private ItemStack contents = ItemStack.EMPTY;
+    private int lastKnownCount = 0;
 
     public HayFeederBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HAY_FEEDER.get(), pos, state);
@@ -86,18 +88,32 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
         if (slot != 0) return;
         ItemStack copy = stack.copy();
         if (copy.getCount() > CAPACITY) copy.setCount(CAPACITY);
-        ItemStack old = this.contents;
         this.contents = copy;
-        boolean grew = copy.getCount() > old.getCount();
         syncToWorld();
-        if (grew && level instanceof ServerLevel server) {
-            BlockPos pos = getBlockPos();
-            server.sendParticles(
-                    new ItemParticleOption(ParticleTypes.ITEM, copy.getItem()),
-                    pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
-                    6, 0.2, 0.05, 0.2, 0.05);
-            server.playSound(null, pos, SoundEvents.COMPOSTER_FILL_SUCCESS,
-                    SoundSource.BLOCKS, 1.0f, 1.0f);
+    }
+
+    /**
+     * Fires whenever the slot mutates — including in-place {@code stack.grow(n)}
+     * from the menu when the player tops up a non-empty slot. We compare against
+     * the previously-synced count so the fill feedback plays for every increment,
+     * not just empty→non-empty.
+     */
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (level instanceof ServerLevel server) {
+            int newCount = contents.getCount();
+            if (newCount > lastKnownCount && !contents.isEmpty()) {
+                Item item = contents.getItem();
+                BlockPos pos = getBlockPos();
+                server.sendParticles(
+                        new ItemParticleOption(ParticleTypes.ITEM, item),
+                        pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
+                        6, 0.2, 0.05, 0.2, 0.05);
+                server.playSound(null, pos, SoundEvents.COMPOSTER_FILL_SUCCESS,
+                        SoundSource.BLOCKS, 1.0f, 1.0f);
+            }
+            lastKnownCount = newCount;
         }
     }
 
@@ -148,6 +164,7 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         this.contents = input.read("contents", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+        this.lastKnownCount = contents.getCount();
     }
 
     @Override
