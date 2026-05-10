@@ -2,8 +2,11 @@ package com.hayfeeder.feature.feeder;
 
 import com.hayfeeder.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -103,5 +106,25 @@ public class HayFeederBlockEntity extends BlockEntity {
         if (!contents.isEmpty()) {
             output.store("contents", ItemStack.CODEC, contents);
         }
+    }
+
+    /**
+     * Sent to clients on chunk load. Without this override the default returns an empty
+     * tag, so the client BE has contents=EMPTY and the BER renders nothing — even though
+     * the server-side contents persisted correctly. Pattern matches BeaconBlockEntity,
+     * SkullBlockEntity, DecoratedPotBlockEntity, etc.
+     */
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return this.saveCustomOnly(registries);
+    }
+
+    /**
+     * Sent on per-tick BE updates (e.g. when setChanged() fires under certain conditions).
+     * Without this override no in-session sync packet is generated.
+     */
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 }
