@@ -2,6 +2,7 @@
 
 A wood-and-iron feeding trough that feeds nearby wheat-eaters, carrot-pigs, seed-chickens and more — passively, on its own schedule. Place it, fill it once, walk away. 30 language translations included.
 
+[![Build](https://github.com/minecraft-revamp/hay_feeder/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/minecraft-revamp/hay_feeder/actions/workflows/build-and-test.yml)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1.2-62B132?logo=minecraft&logoColor=white)](https://www.minecraft.net/)
 [![NeoForge](https://img.shields.io/badge/NeoForge-26.1.2.41--beta-D7742F)](https://neoforged.net/)
 [![Fabric](https://img.shields.io/badge/Fabric-0.148.0%2B26.1.2-DBD0B4)](https://fabricmc.net/)
