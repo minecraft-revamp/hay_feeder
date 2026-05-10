@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -35,6 +36,10 @@ public class HayFeederBlock extends Block implements EntityBlock {
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty EAST  = BooleanProperty.create("east");
     public static final BooleanProperty WEST  = BooleanProperty.create("west");
+    public static final BooleanProperty DIAG_NE = BooleanProperty.create("diag_ne");
+    public static final BooleanProperty DIAG_NW = BooleanProperty.create("diag_nw");
+    public static final BooleanProperty DIAG_SE = BooleanProperty.create("diag_se");
+    public static final BooleanProperty DIAG_SW = BooleanProperty.create("diag_sw");
 
     public HayFeederBlock(BlockBehaviour.Properties props) {
         super(props.randomTicks());
@@ -43,12 +48,16 @@ public class HayFeederBlock extends Block implements EntityBlock {
                 .setValue(NORTH, false)
                 .setValue(SOUTH, false)
                 .setValue(EAST, false)
-                .setValue(WEST, false));
+                .setValue(WEST, false)
+                .setValue(DIAG_NE, false)
+                .setValue(DIAG_NW, false)
+                .setValue(DIAG_SE, false)
+                .setValue(DIAG_SW, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FILL_STAGE, NORTH, SOUTH, EAST, WEST);
+        builder.add(FILL_STAGE, NORTH, SOUTH, EAST, WEST, DIAG_NE, DIAG_NW, DIAG_SE, DIAG_SW);
     }
 
     @Override
@@ -64,7 +73,11 @@ public class HayFeederBlock extends Block implements EntityBlock {
                 .setValue(NORTH, isFeeder(level, pos.north()))
                 .setValue(SOUTH, isFeeder(level, pos.south()))
                 .setValue(EAST,  isFeeder(level, pos.east()))
-                .setValue(WEST,  isFeeder(level, pos.west()));
+                .setValue(WEST,  isFeeder(level, pos.west()))
+                .setValue(DIAG_NE, isFeeder(level, pos.east().north()))
+                .setValue(DIAG_NW, isFeeder(level, pos.west().north()))
+                .setValue(DIAG_SE, isFeeder(level, pos.east().south()))
+                .setValue(DIAG_SW, isFeeder(level, pos.west().south()));
     }
 
     private boolean isFeeder(BlockGetter level, BlockPos pos) {
@@ -134,7 +147,14 @@ public class HayFeederBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        notifyDiagonals(level, pos, true);
+    }
+
+    @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        notifyDiagonals(level, pos, false);
         if (!level.isClientSide() && !player.getAbilities().instabuild) {
             if (level.getBlockEntity(pos) instanceof HayFeederBlockEntity be) {
                 ItemStack remaining = be.getContents();
@@ -145,5 +165,20 @@ public class HayFeederBlock extends Block implements EntityBlock {
             Block.popResource(level, pos, new ItemStack(Items.HAY_BLOCK));
         }
         return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    private void notifyDiagonals(Level level, BlockPos myPos, boolean iExist) {
+        // For each diagonal of mine, set their corresponding flag to indicate I exist (or not).
+        setDiagFlag(level, myPos.east().north(), DIAG_SW, iExist); // I'm SW of them
+        setDiagFlag(level, myPos.west().north(), DIAG_SE, iExist); // I'm SE of them
+        setDiagFlag(level, myPos.east().south(), DIAG_NW, iExist); // I'm NW of them
+        setDiagFlag(level, myPos.west().south(), DIAG_NE, iExist); // I'm NE of them
+    }
+
+    private void setDiagFlag(Level level, BlockPos pos, BooleanProperty flag, boolean value) {
+        BlockState state = level.getBlockState(pos);
+        if (state.is(this) && state.getValue(flag) != value) {
+            level.setBlock(pos, state.setValue(flag, value), Block.UPDATE_ALL);
+        }
     }
 }
