@@ -1,5 +1,6 @@
 {
   "itemGroup.hay_feeder.main": "Hay Feeder",
-  "block.hay_feeder.hay_feeder": "Hay Feeder",
-  "container.hay_feeder.hay_feeder": "Hay Feeder"
+  "block.hay_feeder.hay_feeder": "Feeder",
+  "item.hay_feeder.hay_feeder": "Feeder",
+  "container.hay_feeder.hay_feeder": "Feeder"
 }

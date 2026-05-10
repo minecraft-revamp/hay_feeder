@@ -1,5 +1,6 @@
 {
   "itemGroup.hay_feeder.main": "Hay Feeder",
-  "block.hay_feeder.hay_feeder": "Hrănitor de fân",
-  "container.hay_feeder.hay_feeder": "Hrănitor de fân"
+  "block.hay_feeder.hay_feeder": "Hrănitor",
+  "item.hay_feeder.hay_feeder": "Hrănitor",
+  "container.hay_feeder.hay_feeder": "Hrănitor"
 }
