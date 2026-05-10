@@ -30,7 +30,7 @@ public class HayFeederMenu extends AbstractContainerMenu {
         int startX = (176 - totalWidth) / 2;
         for (int i = 0; i < foodSlotCount; i++) {
             Container c = members.get(i);
-            addSlot(new GroupedFoodSlot(members, c, 0, startX + i * 18 + 1, 35));
+            addSlot(new HayFeederFoodSlot(c, 0, startX + i * 18 + 1, 35));
         }
 
         for (int row = 0; row < 3; row++) {
@@ -88,25 +88,18 @@ public class HayFeederMenu extends AbstractContainerMenu {
         for (Container c : members) c.stopOpen(player);
     }
 
-    private static class GroupedFoodSlot extends Slot {
-        private final List<? extends Container> allMembers;
-
-        GroupedFoodSlot(List<? extends Container> allMembers, Container container, int slot, int x, int y) {
+    /**
+     * Single-feeder slot: capacity 64 (one feeder's CAPACITY). The constraint that a feeder
+     * holds only one food type at a time lives on HayFeederBlockEntity.canPlaceItem and is
+     * applied via Slot.mayPlace's default delegation. No cross-feeder constraint — adjacent
+     * feeders in the same group may freely hold different food types.
+     */
+    private static class HayFeederFoodSlot extends Slot {
+        HayFeederFoodSlot(Container container, int slot, int x, int y) {
             super(container, slot, x, y);
-            this.allMembers = allMembers;
         }
 
         @Override
         public int getMaxStackSize() { return HayFeederBlockEntity.CAPACITY; }
-
-        @Override
-        public boolean mayPlace(ItemStack stack) {
-            if (!AcceptedFoods.isAccepted(stack)) return false;
-            for (Container c : allMembers) {
-                ItemStack content = c.getItem(0);
-                if (!content.isEmpty() && !content.is(stack.getItem())) return false;
-            }
-            return true;
-        }
     }
 }
