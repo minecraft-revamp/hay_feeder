@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "P": "#minecraft:planks",
     "S": "#minecraft:wooden_slabs",
+    "I": "minecraft:iron_ingot",
     "H": "minecraft:hay_block"
   },
   "pattern": [
-    "PPP",
-    "P P",
-    "SHS"
+    "SSS",
+    "S S",
+    "IHI"
   ],
   "result": {
     "id": "hay_feeder:hay_feeder"

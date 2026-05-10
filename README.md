@@ -91,15 +91,15 @@ Useful patterns: a lamp that lights up when a pen's feeder is empty (invert with
 
 ## Recipe
 
-> **Legend** · 🟫 Planks · 🪵 Wooden slab · 🌾 Hay block
+> **Legend** · 🪵 Wooden slab · ⬜ Iron ingot · 🌾 Hay block
 
 |  |  |  |
 |:-:|:-:|:-:|
-| 🟫 | 🟫 | 🟫 |
-| 🟫 |    | 🟫 |
-| 🪵 | 🌾 | 🪵 |
+| 🪵 | 🪵 | 🪵 |
+| 🪵 |    | 🪵 |
+| ⬜ | 🌾 | ⬜ |
 
-Shaped: **5 planks + 2 wooden slabs + 1 hay block**. Any plank type and any wooden slab work (the recipe uses the `#minecraft:planks` and `#minecraft:wooden_slabs` tags, same as a vanilla barrel). The hay block stays as the bale that ends up rendered inside.
+Shaped: **5 wooden slabs + 2 iron ingots + 1 hay block**. Any wooden slab works (the recipe uses the `#minecraft:wooden_slabs` tag). The two iron ingots at the bottom corners materialise as the corner posts on the placed block; the hay block becomes the initial bale rendered inside.
 
 ## Install
 
