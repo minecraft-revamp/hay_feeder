@@ -19,7 +19,8 @@ import java.util.EnumSet;
 public class FollowFeederGoal extends Goal {
 
     private static final double SCAN_RADIUS = 16.0;
-    private static final int    SCAN_COOLDOWN_TICKS = 20;        // 1s between rescans
+    private static final int    SCAN_COOLDOWN_TICKS = 20;        // 1s between rescans when nothing nearby
+    private static final int    STOP_COOLDOWN_TICKS = 100;       // 5s after every release; Wander/Tempt can take over
     private static final double SPEED_MODIFIER = 1.0;
     private static final double STOP_DISTANCE_SQR = 1.5 * 1.5;   // close enough; tickFeeding takes over
 
@@ -46,10 +47,15 @@ public class FollowFeederGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return targetPos != null
-                && HayFeederBlockEntity.canBenefit(animal)
-                && stillValid(targetPos, animal)
-                && animal.distanceToSqr(Vec3.atCenterOf(targetPos)) > STOP_DISTANCE_SQR;
+        if (targetPos == null) return false;
+        if (!HayFeederBlockEntity.canBenefit(animal)) return false;
+        if (!stillValid(targetPos, animal)) return false;
+        if (animal.distanceToSqr(Vec3.atCenterOf(targetPos)) <= STOP_DISTANCE_SQR) return false;
+        // Release MOVE control as soon as the pathfinder is done — either it
+        // arrived (handled above), or it gave up because the target is
+        // unreachable. Without this, animals behind fences would lock onto
+        // the goal and never let Wander run, so they'd appear immobile.
+        return !animal.getNavigation().isDone();
     }
 
     @Override
@@ -65,6 +71,11 @@ public class FollowFeederGoal extends Goal {
     public void stop() {
         animal.getNavigation().stop();
         targetPos = null;
+        // Longer cooldown after every release so the animal can actually
+        // walk away (Wander) or be tempted by a player (TemptGoal) before
+        // we grab it again. Otherwise cows stuck behind a fence loop into
+        // canUse every 20 ticks and never make progress with anything else.
+        cooldown = STOP_COOLDOWN_TICKS;
     }
 
     /** Closest hay_feeder BE in {@link #SCAN_RADIUS} whose contents this animal eats. */
