@@ -1,6 +1,10 @@
 {
   "multipart": [
     { "apply": { "model": "hay_feeder:block/hay_feeder_floor" } },
+    { "apply": { "model": "hay_feeder:block/hay_feeder_corner_ne" } },
+    { "apply": { "model": "hay_feeder:block/hay_feeder_corner_nw" } },
+    { "apply": { "model": "hay_feeder:block/hay_feeder_corner_se" } },
+    { "apply": { "model": "hay_feeder:block/hay_feeder_corner_sw" } },
     { "when": { "north": "false" }, "apply": { "model": "hay_feeder:block/hay_feeder_wall_north" } },
     { "when": { "south": "false" }, "apply": { "model": "hay_feeder:block/hay_feeder_wall_south" } },
     { "when": { "east":  "false" }, "apply": { "model": "hay_feeder:block/hay_feeder_wall_east"  } },
