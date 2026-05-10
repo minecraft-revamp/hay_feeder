@@ -16,13 +16,6 @@ public class HayFeederClient {
     public HayFeederClient(ModContainer container) {
         container.getEventBus().addListener(HayFeederClient::onRegisterMenuScreens);
         container.getEventBus().addListener(HayFeederClient::onRegisterBlockTintSources);
-        // MC 26.1 note: render type (solid / cutout / translucent) is no longer
-        // registered per-block via {@code ItemBlockRenderTypes.setRenderLayer}.
-        // The class is gone; instead, each baked quad's chunk section layer is
-        // chosen automatically from its sprite's transparency
-        // ({@code ChunkSectionLayer.byTransparency(SpriteContents.transparency())}).
-        // The {@code iron_bars} sprite has alpha → quads using it route to
-        // {@code ChunkSectionLayer.CUTOUT} on their own. Nothing to do here.
         HayFeeder.LOGGER.info("Hay Feeder client setup");
     }
 
