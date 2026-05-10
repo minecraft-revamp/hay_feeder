@@ -113,6 +113,9 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
                 server.playSound(null, pos, SoundEvents.COMPOSTER_FILL_SUCCESS,
                         SoundSource.BLOCKS, 1.0f, 1.0f);
             }
+            if (newCount != lastKnownCount) {
+                level.updateNeighbourForOutputSignal(getBlockPos(), getBlockState().getBlock());
+            }
             lastKnownCount = newCount;
         }
     }
