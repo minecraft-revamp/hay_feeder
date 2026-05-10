@@ -2,6 +2,7 @@ package com.hayfeeder.feature.feeder;
 
 import com.hayfeeder.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -43,11 +44,17 @@ public class HayFeederBlockEntity extends BlockEntity {
             this.contents.grow(absorbed);
         }
         setChanged();
-        if (level != null) {
-            BlockState state = getBlockState();
-            level.setBlock(getBlockPos(),
-                    state.setValue(HayFeederBlock.FEEDS_LEFT, this.contents.getCount()),
+        if (level instanceof ServerLevel serverLevel) {
+            BlockPos pos = getBlockPos();
+            level.setBlock(pos,
+                    getBlockState().setValue(HayFeederBlock.FEEDS_LEFT, this.contents.getCount()),
                     Block.UPDATE_ALL);
+            serverLevel.sendParticles(
+                    new ItemParticleOption(ParticleTypes.ITEM, incoming.getItem()),
+                    pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
+                    6, 0.2, 0.05, 0.2, 0.05);
+            serverLevel.playSound(null, pos, SoundEvents.COMPOSTER_FILL_SUCCESS,
+                    SoundSource.BLOCKS, 1.0f, 1.0f);
         }
         return absorbed;
     }
