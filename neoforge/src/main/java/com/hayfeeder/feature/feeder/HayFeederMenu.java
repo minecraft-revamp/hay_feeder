@@ -67,7 +67,7 @@ public class HayFeederMenu extends AbstractContainerMenu {
         }
 
         @Override
-        public int getMaxStackSize() { return HayFeederBlockEntity.CAPACITY; }
+        public int getMaxStackSize() { return container.getMaxStackSize(); }
 
         @Override
         public boolean mayPlace(ItemStack stack) {
