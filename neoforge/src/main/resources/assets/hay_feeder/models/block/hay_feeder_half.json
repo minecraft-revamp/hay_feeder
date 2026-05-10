@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "hay_top": "hay_feeder:block/hay_top",
+    "hay_side": "hay_feeder:block/hay_side",
+    "trough_top": "hay_feeder:block/trough_top",
+    "trough_side": "hay_feeder:block/trough_side",
+    "particle": "hay_feeder:block/hay_side"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "down":  { "texture": "#trough_top" },
+        "up":    { "texture": "#trough_top" },
+        "north": { "texture": "#trough_side" },
+        "south": { "texture": "#trough_side" },
+        "east":  { "texture": "#trough_side" },
+        "west":  { "texture": "#trough_side" }
+      }
+    },
+    {
+      "from": [3, 2, 3],
+      "to": [13, 11, 13],
+      "faces": {
+        "down":  { "texture": "#hay_top" },
+        "up":    { "texture": "#hay_top" },
+        "north": { "texture": "#hay_side" },
+        "south": { "texture": "#hay_side" },
+        "east":  { "texture": "#hay_side" },
+        "west":  { "texture": "#hay_side" }
+      }
+    }
+  ]
+}
