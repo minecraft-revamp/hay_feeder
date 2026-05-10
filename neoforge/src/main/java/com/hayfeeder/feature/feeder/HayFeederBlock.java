@@ -27,11 +27,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class HayFeederBlock extends Block implements EntityBlock {
+    /**
+     * Collision shape extends to y=24 (1.5 blocks) so mobs can't jump over the
+     * feeder — same height as a vanilla fence. The visual {@link #getShape}
+     * stays at a normal 1-block cube.
+     */
+    private static final VoxelShape COLLISION_SHAPE = Block.box(0, 0, 0, 16, 24, 16);
+
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty EAST  = BooleanProperty.create("east");
@@ -118,6 +127,11 @@ public class HayFeederBlock extends Block implements EntityBlock {
         if (level.getBlockEntity(pos) instanceof HayFeederBlockEntity be) {
             be.tickFeeding(level, pos, state);
         }
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return COLLISION_SHAPE;
     }
 
     @Override
