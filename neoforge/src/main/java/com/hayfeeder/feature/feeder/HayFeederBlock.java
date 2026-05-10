@@ -1,5 +1,6 @@
 package com.hayfeeder.feature.feeder;
 
+import com.hayfeeder.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -11,7 +12,6 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -159,7 +159,7 @@ public class HayFeederBlock extends Block implements EntityBlock {
                     Block.popResource(level, pos, remaining.copy());
                 }
             }
-            Block.popResource(level, pos, new ItemStack(Items.HAY_BLOCK));
+            Block.popResource(level, pos, new ItemStack(ModItems.HAY_FEEDER.get()));
         }
         return super.playerWillDestroy(level, pos, state, player);
     }
