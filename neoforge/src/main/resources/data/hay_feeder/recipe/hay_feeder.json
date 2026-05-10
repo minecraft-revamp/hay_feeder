@@ -1,11 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    "minecraft:hay_block"
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "#minecraft:wooden_slabs",
+    "H": "minecraft:hay_block"
+  },
+  "pattern": [
+    "PPP",
+    "P P",
+    "SHS"
   ],
   "result": {
-    "id": "hay_feeder:hay_feeder",
-    "count": 1
+    "id": "hay_feeder:hay_feeder"
   }
 }
