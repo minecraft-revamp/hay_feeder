@@ -1,5 +1,5 @@
 {
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "Hay Feeder",
-  "block.hay_feeder.hay_feeder.empty": "Empty — right-click with food to fill"
+  "container.hay_feeder.hay_feeder": "Hay Feeder"
 }
