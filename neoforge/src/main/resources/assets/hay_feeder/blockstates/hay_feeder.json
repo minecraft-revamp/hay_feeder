@@ -1,13 +1,7 @@
 {
   "variants": {
-    "feeds_left=0": { "model": "hay_feeder:block/hay_feeder_empty" },
-    "feeds_left=1": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=2": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=3": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=4": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=5": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=6": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=7": { "model": "hay_feeder:block/hay_feeder_half" },
-    "feeds_left=8": { "model": "hay_feeder:block/hay_feeder_full" }
+    "fill_stage=empty": { "model": "hay_feeder:block/hay_feeder_empty" },
+    "fill_stage=half":  { "model": "hay_feeder:block/hay_feeder_half" },
+    "fill_stage=full":  { "model": "hay_feeder:block/hay_feeder_full" }
   }
 }

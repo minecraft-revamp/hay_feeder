@@ -4,6 +4,7 @@ import com.hayfeeder.registry.ModBlockEntities;
 import com.hayfeeder.registry.ModBlocks;
 import com.hayfeeder.registry.ModCreativeTabs;
 import com.hayfeeder.registry.ModItems;
+import com.hayfeeder.registry.ModMenuTypes;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -19,6 +20,7 @@ public class HayFeeder {
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         LOGGER.info("Hay Feeder initialised");

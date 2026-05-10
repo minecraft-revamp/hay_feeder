@@ -15,22 +15,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class HayFeederBlock extends Block implements EntityBlock {
-    public static final int MAX_FEEDS = 8;
-    public static final IntegerProperty FEEDS_LEFT = IntegerProperty.create("feeds_left", 0, MAX_FEEDS);
+    public static final EnumProperty<FillStage> FILL_STAGE = EnumProperty.create("fill_stage", FillStage.class);
 
     public HayFeederBlock(BlockBehaviour.Properties props) {
         super(props.randomTicks());
-        registerDefaultState(stateDefinition.any().setValue(FEEDS_LEFT, 0));
+        registerDefaultState(stateDefinition.any().setValue(FILL_STAGE, FillStage.EMPTY));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FEEDS_LEFT);
+        builder.add(FILL_STAGE);
     }
 
     @Override
@@ -48,16 +47,20 @@ public class HayFeederBlock extends Block implements EntityBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                           Player player, InteractionHand hand, BlockHitResult hit) {
-        if (stack.isEmpty()) return InteractionResult.TRY_WITH_EMPTY_HAND;
-        if (!(level.getBlockEntity(pos) instanceof HayFeederBlockEntity be)) {
-            return InteractionResult.TRY_WITH_EMPTY_HAND;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (level.getBlockEntity(pos) instanceof HayFeederBlockEntity be) {
+            player.openMenu(be, pos);
         }
-        int absorbed = be.tryRefill(stack);
-        if (absorbed == 0) return InteractionResult.TRY_WITH_EMPTY_HAND;
-        if (!player.getAbilities().instabuild) {
-            stack.shrink(absorbed);
+        return InteractionResult.SUCCESS_SERVER;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (level.getBlockEntity(pos) instanceof HayFeederBlockEntity be) {
+            player.openMenu(be, pos);
         }
-        return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+        return InteractionResult.SUCCESS_SERVER;
     }
 
     @Override
