@@ -91,15 +91,15 @@ Useful patterns: a lamp that lights up when a pen's feeder is empty (invert with
 
 ## Recipe
 
-> **Legend** · 🪵 Wooden slab · ⬜ Iron ingot · 🌾 Hay block
+> **Legend** · 🪵 Wooden slab · ⬜ Iron ingot
 
 |  |  |  |
 |:-:|:-:|:-:|
-| 🪵 | 🪵 | 🪵 |
 | 🪵 |    | 🪵 |
-| ⬜ | 🌾 | ⬜ |
+| 🪵 |    | 🪵 |
+| ⬜ | 🪵 | ⬜ |
 
-Shaped: **5 wooden slabs + 2 iron ingots + 1 hay block**. Any wooden slab works (the recipe uses the `#minecraft:wooden_slabs` tag). The two iron ingots at the bottom corners materialise as the corner posts on the placed block; the hay block becomes the initial bale rendered inside.
+Shaped: **5 wooden slabs + 2 iron ingots**. Any wooden slab works (`#minecraft:wooden_slabs` tag). The slabs build the trough (walls + base); the two iron ingots at the bottom corners materialise as the iron corner posts on the placed block. The feeder is empty when crafted — fill it with the food of your choice in-game.
 
 ## Install
 

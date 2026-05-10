@@ -3,13 +3,12 @@
   "category": "misc",
   "key": {
     "S": "#minecraft:wooden_slabs",
-    "I": "minecraft:iron_ingot",
-    "H": "minecraft:hay_block"
+    "I": "minecraft:iron_ingot"
   },
   "pattern": [
-    "SSS",
     "S S",
-    "IHI"
+    "S S",
+    "ISI"
   ],
   "result": {
     "id": "hay_feeder:hay_feeder"
