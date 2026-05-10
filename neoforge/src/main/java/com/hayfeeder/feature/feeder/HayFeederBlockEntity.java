@@ -136,9 +136,9 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
     private void syncToWorld() {
         setChanged();
         if (level != null) {
-            level.setBlock(getBlockPos(),
-                    getBlockState().setValue(HayFeederBlock.FILL_STAGE, FillStage.fromCount(contents.getCount())),
-                    Block.UPDATE_ALL);
+            // BE renderer reads contents directly, so no blockstate change is needed —
+            // just push an update packet so clients see the new count.
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
 

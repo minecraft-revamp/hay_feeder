@@ -24,14 +24,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class HayFeederBlock extends Block implements EntityBlock {
-    public static final EnumProperty<FillStage> FILL_STAGE = EnumProperty.create("fill_stage", FillStage.class);
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty EAST  = BooleanProperty.create("east");
@@ -44,7 +42,6 @@ public class HayFeederBlock extends Block implements EntityBlock {
     public HayFeederBlock(BlockBehaviour.Properties props) {
         super(props.randomTicks());
         registerDefaultState(stateDefinition.any()
-                .setValue(FILL_STAGE, FillStage.EMPTY)
                 .setValue(NORTH, false)
                 .setValue(SOUTH, false)
                 .setValue(EAST, false)
@@ -57,7 +54,7 @@ public class HayFeederBlock extends Block implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FILL_STAGE, NORTH, SOUTH, EAST, WEST, DIAG_NE, DIAG_NW, DIAG_SE, DIAG_SW);
+        builder.add(NORTH, SOUTH, EAST, WEST, DIAG_NE, DIAG_NW, DIAG_SE, DIAG_SW);
     }
 
     @Override
