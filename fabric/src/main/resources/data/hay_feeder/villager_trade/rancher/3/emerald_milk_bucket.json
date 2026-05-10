@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "id": "minecraft:milk_bucket"
+  },
+  "max_uses": 4.0,
+  "reputation_discount": 0.05,
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 4.0
+  },
+  "xp": 30.0
+}

@@ -2,5 +2,6 @@
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "Máng ăn",
   "item.hay_feeder.hay_feeder": "Máng ăn",
-  "container.hay_feeder.hay_feeder": "Máng ăn"
+  "container.hay_feeder.hay_feeder": "Máng ăn",
+  "entity.hay_feeder.villager.rancher": "Người chăn nuôi"
 }

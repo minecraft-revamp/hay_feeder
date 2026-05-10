@@ -2,5 +2,6 @@
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "Krmítko",
   "item.hay_feeder.hay_feeder": "Krmítko",
-  "container.hay_feeder.hay_feeder": "Krmítko"
+  "container.hay_feeder.hay_feeder": "Krmítko",
+  "entity.hay_feeder.villager.rancher": "Chovatel"
 }

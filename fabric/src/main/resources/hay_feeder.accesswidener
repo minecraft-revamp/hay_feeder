@@ -4,3 +4,9 @@ accessWidener	v2	official
 # Fabric needs an explicit widener so we can register FollowFeederGoal from
 # our HayFeederFabric ENTITY_LOAD listener (a different package than Mob).
 accessible	field	net/minecraft/world/entity/Mob	goalSelector	Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+
+# PoiTypes.TYPE_BY_STATE is the blockstate → holder lookup used by
+# PoiTypes.forState. NeoForge swaps in its own map via NeoForgeRegistryCallbacks
+# so modded PoI types register automatically; on Fabric we need to write into
+# the vanilla map ourselves when registering hay_feeder as a workstation.
+accessible	field	net/minecraft/world/entity/ai/village/poi/PoiTypes	TYPE_BY_STATE	Ljava/util/Map;
