@@ -114,7 +114,12 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
                         SoundSource.BLOCKS, 1.0f, 1.0f);
             }
             if (newCount != lastKnownCount) {
-                level.updateNeighbourForOutputSignal(getBlockPos(), getBlockState().getBlock());
+                BlockPos pos = getBlockPos();
+                Block block = getBlockState().getBlock();
+                // Comparator-aware update (also walks 1 block through conductors).
+                level.updateNeighbourForOutputSignal(pos, block);
+                // Direct-signal update so adjacent wires/lamps recompute power.
+                level.updateNeighborsAt(pos, block);
             }
             lastKnownCount = newCount;
         }
