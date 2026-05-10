@@ -16,7 +16,7 @@ A wood-and-iron feeding trough that feeds nearby wheat-eaters, carrot-pigs, seed
 
 ## What it does
 
-Drop the feeder, open the GUI, fill its slot with any animal-friendly food, and any compatible animal that wanders within ~6 blocks gets fed automatically: heals, breeds, ages up babies — the same reaction as if you'd hand-fed them. Each "feed" consumes one item from the trough; once the slot is empty, animals ignore it.
+Drop the feeder, open the GUI, fill its slot with any animal-friendly food, and breedable animals **walk to it on their own** — the trough acts like a player holding food, pulling cows toward wheat, pigs toward carrots, chickens toward seeds. When an animal arrives at the trough, it consumes exactly one item and reacts as if you'd hand-fed it: heals, breeds, ages up babies. **One charge = one animal**, not "everyone in the radius for free".
 
 A single feeder is a 1×1 block. **Connected feeders share inventory** — place several side by side and they merge into one wide trough with one slot per cell, openable from any of them. Useful for big herds without standing there clicking 64 carrots.
 
@@ -69,16 +69,18 @@ Pulling items back out (shift-click) shrinks the pile in real time too.
 
 ## Auto-feeding mechanic
 
-Each feeder ticks roughly once per random tick — the same cadence as crops growing. On each tick:
+Two halves: a per-animal AI goal that pulls them toward a feeder, and the per-feeder consume tick that fires when an animal is actually at it.
 
-1. Find every alive `Animal` within a 6-block cube around the feeder.
-2. Filter to those for which `animal.isFood(stackInSlot)` is true.
-3. For each match, age up babies and trigger breeding hearts on adults.
-4. Consume **one** item from the slot, emit happy-villager particles + a soft `grass_break` blip.
+**Animal side — `FollowFeederGoal`.** Every `Animal` in a loaded server level gets a custom AI goal injected at spawn (priority 3 — above default Wander, below Tempt). Once a second the goal scans a 16-block radius for hay-feeders containing food this animal eats. If it finds one *and* the animal can actually benefit (baby that can age up, or adult that `canFallInLove`), the animal pathfinds toward the feeder. It stops within 1.5 blocks and lets the trough do the rest. Animals that can't currently benefit (just bred, in cooldown) ignore the feeder entirely — no wasted charges.
 
-So a full 64-item slot feeds 64 individual events. With one feeder per food type and a mixed herd, expect every animal that cares about a food to slowly cycle through.
+**Feeder side — `tickFeeding`.** On each random tick, the feeder:
 
-> Animals don't have to be touching the block — the radius is generous enough to cover a small pen. They also don't queue on it; one feeder can feed a whole herd over time.
+1. Filters animals within a 2-block cube around the trough by `animal.isFood(stackInSlot) && canBenefit(animal)`.
+2. Picks the **closest** one.
+3. Feeds **just that one animal** — ages up if baby, sets in-love if adult — and consumes **exactly one item** from the slot.
+4. Emits happy-villager particles + a soft `grass_break` blip.
+
+So a full 64-item slot feeds 64 individual events. One feeder per food type and a mixed herd lets every animal that cares about a food cycle through naturally; greedy herds don't drain the trough faster than it should.
 
 ## Redstone
 
