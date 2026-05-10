@@ -1,20 +1,22 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "iron":     "minecraft:block/iron_block",
-    "particle": "minecraft:block/iron_block"
+    "wood_side":   "minecraft:block/composter_side",
+    "wood_top":    "minecraft:block/composter_top",
+    "wood_bottom": "minecraft:block/composter_bottom",
+    "particle":    "minecraft:block/composter_side"
   },
   "elements": [
     {
       "from": [0, 2, 2],
       "to":   [2, 16, 14],
       "faces": {
-        "down":  { "texture": "#iron" },
-        "up":    { "texture": "#iron" },
-        "north": { "texture": "#iron" },
-        "south": { "texture": "#iron" },
-        "east":  { "texture": "#iron" },
-        "west":  { "texture": "#iron" }
+        "down":  { "texture": "#wood_bottom" },
+        "up":    { "texture": "#wood_top" },
+        "north": { "texture": "#wood_side" },
+        "south": { "texture": "#wood_side" },
+        "east":  { "texture": "#wood_side" },
+        "west":  { "texture": "#wood_side" }
       }
     }
   ]
