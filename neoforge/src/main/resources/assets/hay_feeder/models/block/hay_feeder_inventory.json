@@ -29,16 +29,20 @@
           "texture": "#wood_bottom"
         },
         "north": {
-          "texture": "#wood_side"
+          "texture": "#bars",
+          "uv": [0, 7, 16, 9]
         },
         "south": {
-          "texture": "#wood_side"
+          "texture": "#bars",
+          "uv": [0, 7, 16, 9]
         },
         "east": {
-          "texture": "#wood_side"
+          "texture": "#bars",
+          "uv": [0, 7, 16, 9]
         },
         "west": {
-          "texture": "#wood_side"
+          "texture": "#bars",
+          "uv": [0, 7, 16, 9]
         }
       }
     },
