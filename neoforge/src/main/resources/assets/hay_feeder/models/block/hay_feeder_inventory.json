@@ -5,6 +5,7 @@
     "wood_top": "minecraft:block/composter_top",
     "wood_bottom": "minecraft:block/composter_bottom",
     "bars": "minecraft:block/iron_bars",
+    "iron": "minecraft:block/iron_block",
     "contents_top": "minecraft:block/hay_block_top",
     "contents_side": "minecraft:block/hay_block_side",
     "particle": "minecraft:block/hay_block_side"
@@ -29,20 +30,20 @@
           "texture": "#wood_bottom"
         },
         "north": {
-          "texture": "#bars",
-          "uv": [0, 7, 16, 9]
+          "texture": "#iron",
+          "uv": [0, 14, 16, 16]
         },
         "south": {
-          "texture": "#bars",
-          "uv": [0, 7, 16, 9]
+          "texture": "#iron",
+          "uv": [0, 14, 16, 16]
         },
         "east": {
-          "texture": "#bars",
-          "uv": [0, 7, 16, 9]
+          "texture": "#iron",
+          "uv": [0, 14, 16, 16]
         },
         "west": {
-          "texture": "#bars",
-          "uv": [0, 7, 16, 9]
+          "texture": "#iron",
+          "uv": [0, 14, 16, 16]
         }
       }
     },

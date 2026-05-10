@@ -4,7 +4,7 @@
     "wood_side":   "minecraft:block/composter_side",
     "wood_top":    "minecraft:block/composter_top",
     "wood_bottom": "minecraft:block/composter_bottom",
-    "bars":        "minecraft:block/iron_bars",
+    "iron":        "minecraft:block/iron_block",
     "particle":    "minecraft:block/composter_side"
   },
   "elements": [
@@ -14,10 +14,10 @@
       "faces": {
         "down":  { "texture": "#wood_bottom" },
         "up":    { "texture": "#wood_bottom" },
-        "north": { "texture": "#bars", "uv": [0, 7, 16, 9] },
-        "south": { "texture": "#bars", "uv": [0, 7, 16, 9] },
-        "east":  { "texture": "#bars", "uv": [0, 7, 16, 9] },
-        "west":  { "texture": "#bars", "uv": [0, 7, 16, 9] }
+        "north": { "texture": "#iron", "uv": [0, 14, 16, 16] },
+        "south": { "texture": "#iron", "uv": [0, 14, 16, 16] },
+        "east":  { "texture": "#iron", "uv": [0, 14, 16, 16] },
+        "west":  { "texture": "#iron", "uv": [0, 14, 16, 16] }
       }
     }
   ]
