@@ -1,5 +1,6 @@
 {
   "itemGroup.hay_feeder.main": "Hay Feeder",
-  "block.hay_feeder.hay_feeder": "Годівниця для сіна",
-  "container.hay_feeder.hay_feeder": "Годівниця для сіна"
+  "block.hay_feeder.hay_feeder": "Годівниця",
+  "item.hay_feeder.hay_feeder": "Годівниця",
+  "container.hay_feeder.hay_feeder": "Годівниця"
 }

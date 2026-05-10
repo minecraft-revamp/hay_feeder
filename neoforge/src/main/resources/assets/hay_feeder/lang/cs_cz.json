@@ -1,5 +1,6 @@
 {
   "itemGroup.hay_feeder.main": "Hay Feeder",
-  "block.hay_feeder.hay_feeder": "Krmítko na seno",
-  "container.hay_feeder.hay_feeder": "Krmítko na seno"
+  "block.hay_feeder.hay_feeder": "Krmítko",
+  "item.hay_feeder.hay_feeder": "Krmítko",
+  "container.hay_feeder.hay_feeder": "Krmítko"
 }
