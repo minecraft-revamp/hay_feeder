@@ -134,6 +134,19 @@ public class HayFeederBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected boolean isSignalSource(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        if (level.getBlockEntity(pos) instanceof Container c) {
+            return AbstractContainerMenu.getRedstoneSignalFromContainer(c);
+        }
+        return 0;
+    }
+
+    @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                           Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
