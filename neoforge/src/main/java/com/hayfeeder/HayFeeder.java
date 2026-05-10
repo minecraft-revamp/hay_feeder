@@ -45,22 +45,17 @@ public class HayFeeder {
 
     /**
      * Wire each hay-feeder blockstate into vanilla's {@code PoiTypes.TYPE_BY_STATE}
-     * lookup explicitly. NeoForge's registry callbacks claim to do this automatically
-     * for modded PoIs, but in MC 26.1 villagers were silently failing to bind to the
-     * workstation in our testing — populating the map ourselves here is idempotent
-     * if the auto-wire already ran, and fixes the binding if it didn't.
+     * lookup explicitly. NeoForge's registry callbacks usually do this automatically
+     * for modded PoIs, but populating the map ourselves here is idempotent and
+     * guarantees villagers see the workstation on every world load.
      */
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             Map<BlockState, Holder<PoiType>> map = GameData.getBlockStatePointOfInterestTypeMap();
             Holder<PoiType> holder = ModPoiTypes.HAY_FEEDER;
-            int added = 0;
             for (BlockState state : ModBlocks.HAY_FEEDER.get().getStateDefinition().getPossibleStates()) {
-                if (map.put(state, holder) == null) {
-                    added++;
-                }
+                map.putIfAbsent(state, holder);
             }
-            LOGGER.info("Bound {} hay_feeder blockstates to PoI hay_feeder:hay_feeder", added);
         });
     }
 }
