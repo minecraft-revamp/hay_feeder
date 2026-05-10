@@ -2,7 +2,9 @@ package com.hayfeeder.feature.feeder;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.core.BlockPos;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -88,6 +90,17 @@ public class HayFeederBlockEntityRenderer
                 blockEntity.getLevel(),
                 null,
                 0);
+
+        // Override the inherited lightCoords: the BE's own BlockPos sits inside the opaque hay
+        // bale, so light there is 0 and the floating item renders fully black. Read the light at
+        // pos.above() instead — the air column where the item actually floats — for proper
+        // sky+block illumination. Pattern matches BrushableBlockRenderer.
+        BlockPos abovePos = blockEntity.getBlockPos().above();
+        state.lightCoords = LevelRenderer.getLightCoords(
+                LevelRenderer.BrightnessGetter.DEFAULT,
+                blockEntity.getLevel(),
+                blockEntity.getLevel().getBlockState(abovePos),
+                abovePos);
     }
 
     @Override
