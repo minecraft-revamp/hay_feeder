@@ -206,6 +206,13 @@ idea {
     }
 }
 
-// Resource validator hook reserved: buckets_update's tests/validate.py is
-// hardcoded to that mod's namespace, so it is not vendored here. Re-wire a
-// validateResources task once the linter supports an arbitrary mod_id.
+// Resource validator (tests/validate.py) — wired onto `check`.
+// Catches JSON errors, lang desync, pack.mcmeta format, missing texture refs,
+// and recipe shape problems. Runs in <1s. See tests/validate.py for details.
+tasks.register('validateResources', Exec) {
+    description = 'Lint resources (JSON, lang, pack.mcmeta, models, recipes) via Python'
+    group = 'verification'
+    workingDir = rootProject.file('..')
+    commandLine 'python3', 'tests/validate.py', projectDir.absolutePath
+}
+tasks.named('check').configure { dependsOn 'validateResources' }
