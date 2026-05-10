@@ -91,13 +91,15 @@ Useful patterns: a lamp that lights up when a pen's feeder is empty (invert with
 
 ## Recipe
 
+> **Legend** · 🟫 Planks · 🪵 Wooden slab · 🌾 Hay block
+
 |  |  |  |
 |:-:|:-:|:-:|
-|  |  |  |
-|  | 🌾 |  |
-|  |  |  |
+| 🟫 | 🟫 | 🟫 |
+| 🟫 |    | 🟫 |
+| 🪵 | 🌾 | 🪵 |
 
-Shapeless: **1 hay block → 1 hay feeder**. Trivially convertible — the block is mostly the cosmetic wrapper around the inventory + redstone behaviour. *(Subject to bumping; see roadmap.)*
+Shaped: **5 planks + 2 wooden slabs + 1 hay block**. Any plank type and any wooden slab work (the recipe uses the `#minecraft:planks` and `#minecraft:wooden_slabs` tags, same as a vanilla barrel). The hay block stays as the bale that ends up rendered inside.
 
 ## Install
 
@@ -140,7 +142,6 @@ Two-loader-side-by-side, no Architectury — same convention as the rest of the 
 ## Roadmap
 
 - **Fabric port** — mirror the NeoForge implementation; key adjustments are container/menu plumbing and the BlockEntityRenderer registration path.
-- **Recipe rebalance** — currently 1 hay-block → 1 feeder is a no-cost reskin. Likely bump to require iron/copper for the corner posts so it costs more than the source material it's wrapping.
 - **i18n** — only `en_us` is in the tree. Mirror the 30-language coverage that `buckets_update` ships with.
 - **Group-aware redstone** *(maybe)* — currently each member feeder reports its own slot. A connected group could report total fill across all members; nice for hopper-driven auto-top-ups feeding a whole row.
 - **CI** — add the build-and-test workflow that `buckets_update` already has.
