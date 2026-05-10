@@ -112,24 +112,24 @@ public class HayFeederBlock extends Block implements EntityBlock {
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                           Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
-        List<HayFeederBlockEntity> group = FeederGroup.findMembers(level, pos, this);
-        if (group.isEmpty()) return InteractionResult.PASS;
-        GroupContainer container = new GroupContainer(group);
-        player.openMenu(new SimpleMenuProvider(
-                (id, inv, p) -> new HayFeederMenu(id, inv, container),
-                Component.translatable("container.hay_feeder.hay_feeder")), pos);
-        return InteractionResult.SUCCESS_SERVER;
+        return openGroupMenu(level, pos, player);
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
+        return openGroupMenu(level, pos, player);
+    }
+
+    private InteractionResult openGroupMenu(Level level, BlockPos pos, Player player) {
         List<HayFeederBlockEntity> group = FeederGroup.findMembers(level, pos, this);
         if (group.isEmpty()) return InteractionResult.PASS;
-        GroupContainer container = new GroupContainer(group);
-        player.openMenu(new SimpleMenuProvider(
-                (id, inv, p) -> new HayFeederMenu(id, inv, container),
-                Component.translatable("container.hay_feeder.hay_feeder")), pos);
+        if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+            SimpleMenuProvider provider = new SimpleMenuProvider(
+                    (id, inv, p) -> new HayFeederMenu(id, inv, group),
+                    Component.translatable("container.hay_feeder.hay_feeder"));
+            sp.openMenu(provider, buf -> buf.writeInt(group.size()));
+        }
         return InteractionResult.SUCCESS_SERVER;
     }
 

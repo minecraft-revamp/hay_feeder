@@ -14,8 +14,10 @@ public final class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<HayFeederMenu>> HAY_FEEDER =
             MENU_TYPES.register("hay_feeder",
-                    () -> IMenuTypeExtension.create(
-                            (containerId, inv, data) -> new HayFeederMenu(containerId, inv)));
+                    () -> IMenuTypeExtension.create((containerId, inv, data) -> {
+                        int count = data.readInt();
+                        return new HayFeederMenu(containerId, inv, count);
+                    }));
 
     private ModMenuTypes() {}
 }
