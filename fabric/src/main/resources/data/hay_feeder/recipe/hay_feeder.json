@@ -1,11 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    "minecraft:hay_block"
+  "key": {
+    "S": "#minecraft:wooden_slabs",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "S S",
+    "S S",
+    "ISI"
   ],
   "result": {
-    "id": "hay_feeder:hay_feeder",
-    "count": 1
+    "id": "hay_feeder:hay_feeder"
   }
 }
