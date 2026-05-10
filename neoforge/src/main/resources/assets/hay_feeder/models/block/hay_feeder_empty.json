@@ -12,7 +12,7 @@
       "to":   [16, 2, 16],
       "faces": {
         "down":  { "texture": "#wood_bottom" },
-        "up":    { "texture": "#wood_top" },
+        "up":    { "texture": "#wood_bottom" },
         "north": { "texture": "#wood_side" },
         "south": { "texture": "#wood_side" },
         "east":  { "texture": "#wood_side" },
