@@ -1,6 +1,6 @@
 # Hay Feeder
 
-A wood-and-iron feeding trough that feeds nearby wheat-eaters, carrot-pigs, seed-chickens and more — passively, on its own schedule. Place it, fill it once, walk away.
+A wood-and-iron feeding trough that feeds nearby wheat-eaters, carrot-pigs, seed-chickens and more — passively, on its own schedule. Place it, fill it once, walk away. 30 language translations included.
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1.2-62B132?logo=minecraft&logoColor=white)](https://www.minecraft.net/)
 [![NeoForge](https://img.shields.io/badge/NeoForge-26.1.2.41--beta-D7742F)](https://neoforged.net/)
@@ -141,8 +141,7 @@ Two-loader-side-by-side, no Architectury — same convention as the rest of the 
 
 ## Roadmap
 
-- **Fabric port** — mirror the NeoForge implementation; key adjustments are container/menu plumbing and the BlockEntityRenderer registration path.
-- **i18n** — only `en_us` is in the tree. Mirror the 30-language coverage that `buckets_update` ships with.
+- **Fabric port** — mirror the NeoForge implementation; key adjustments are container/menu plumbing and the BlockEntityRenderer registration path. Includes mirroring the 30 lang files into `fabric/src/main/resources/`.
 - **Group-aware redstone** *(maybe)* — currently each member feeder reports its own slot. A connected group could report total fill across all members; nice for hopper-driven auto-top-ups feeding a whole row.
 - **CI** — add the build-and-test workflow that `buckets_update` already has.
 
