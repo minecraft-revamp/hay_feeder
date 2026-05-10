@@ -9,16 +9,27 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HayFeederMenu extends AbstractContainerMenu {
-    private final Container container;
+    private final List<? extends Container> members;
+    private final int foodSlotCount;
 
-    public HayFeederMenu(int containerId, Inventory playerInventory, Container container) {
+    public HayFeederMenu(int containerId, Inventory playerInventory, List<? extends Container> members) {
         super(ModMenuTypes.HAY_FEEDER.get(), containerId);
-        checkContainerSize(container, 1);
-        this.container = container;
-        container.startOpen(playerInventory.player);
+        if (members.isEmpty()) throw new IllegalArgumentException("hay_feeder menu requires at least 1 member");
+        this.members = members;
+        this.foodSlotCount = members.size();
 
-        addSlot(new HayFeederFoodSlot(container, 0, 80, 35));
+        for (Container c : members) c.startOpen(playerInventory.player);
+
+        int totalWidth = foodSlotCount * 18;
+        int startX = (176 - totalWidth) / 2;
+        for (int i = 0; i < foodSlotCount; i++) {
+            Container c = members.get(i);
+            addSlot(new GroupedFoodSlot(members, c, 0, startX + i * 18 + 1, 35));
+        }
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
@@ -30,8 +41,15 @@ public class HayFeederMenu extends AbstractContainerMenu {
         }
     }
 
-    public HayFeederMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, new SimpleContainer(1));
+    /** Client-side: builds dummy containers; server will sync slot states. */
+    public HayFeederMenu(int containerId, Inventory playerInventory, int memberCount) {
+        this(containerId, playerInventory, dummyMembers(memberCount));
+    }
+
+    private static List<Container> dummyMembers(int count) {
+        List<Container> list = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) list.add(new SimpleContainer(1));
+        return list;
     }
 
     @Override
@@ -41,10 +59,12 @@ public class HayFeederMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack here = slot.getItem();
             returned = here.copy();
-            if (slotIndex == 0) {
-                if (!moveItemStackTo(here, 1, 37, true)) return ItemStack.EMPTY;
+            int invStart = foodSlotCount;
+            int invEnd = foodSlotCount + 36;
+            if (slotIndex < foodSlotCount) {
+                if (!moveItemStackTo(here, invStart, invEnd, true)) return ItemStack.EMPTY;
             } else {
-                if (!moveItemStackTo(here, 0, 1, false)) return ItemStack.EMPTY;
+                if (!moveItemStackTo(here, 0, foodSlotCount, false)) return ItemStack.EMPTY;
             }
             if (here.isEmpty()) slot.setByPlayer(ItemStack.EMPTY);
             else slot.setChanged();
@@ -53,25 +73,38 @@ public class HayFeederMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) { return container.stillValid(player); }
+    public boolean stillValid(Player player) {
+        for (Container c : members) {
+            if (!c.stillValid(player)) return false;
+        }
+        return true;
+    }
 
     @Override
     public void removed(Player player) {
         super.removed(player);
-        container.stopOpen(player);
+        for (Container c : members) c.stopOpen(player);
     }
 
-    private static class HayFeederFoodSlot extends Slot {
-        HayFeederFoodSlot(Container container, int slot, int x, int y) {
+    private static class GroupedFoodSlot extends Slot {
+        private final List<? extends Container> allMembers;
+
+        GroupedFoodSlot(List<? extends Container> allMembers, Container container, int slot, int x, int y) {
             super(container, slot, x, y);
+            this.allMembers = allMembers;
         }
 
         @Override
-        public int getMaxStackSize() { return container.getMaxStackSize(); }
+        public int getMaxStackSize() { return HayFeederBlockEntity.CAPACITY; }
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return container.canPlaceItem(0, stack);
+            if (!AcceptedFoods.isAccepted(stack)) return false;
+            for (Container c : allMembers) {
+                ItemStack content = c.getItem(0);
+                if (!content.isEmpty() && !content.is(stack.getItem())) return false;
+            }
+            return true;
         }
     }
 }

@@ -84,15 +84,16 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
     @Override
     public void setItem(int slot, ItemStack stack) {
         if (slot != 0) return;
-        if (stack.getCount() > CAPACITY) stack.setCount(CAPACITY);
+        ItemStack copy = stack.copy();
+        if (copy.getCount() > CAPACITY) copy.setCount(CAPACITY);
         ItemStack old = this.contents;
-        this.contents = stack;
-        boolean grew = stack.getCount() > old.getCount();
+        this.contents = copy;
+        boolean grew = copy.getCount() > old.getCount();
         syncToWorld();
         if (grew && level instanceof ServerLevel server) {
             BlockPos pos = getBlockPos();
             server.sendParticles(
-                    new ItemParticleOption(ParticleTypes.ITEM, stack.getItem()),
+                    new ItemParticleOption(ParticleTypes.ITEM, copy.getItem()),
                     pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
                     6, 0.2, 0.05, 0.2, 0.05);
             server.playSound(null, pos, SoundEvents.COMPOSTER_FILL_SUCCESS,
@@ -127,7 +128,7 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
 
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new HayFeederMenu(containerId, playerInventory, this);
+        return new HayFeederMenu(containerId, playerInventory, java.util.List.of(this));
     }
 
     // --- Internal ----------------------------------------------------------
