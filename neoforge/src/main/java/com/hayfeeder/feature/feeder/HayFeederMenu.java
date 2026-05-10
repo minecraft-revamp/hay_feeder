@@ -16,6 +16,8 @@ public class HayFeederMenu extends AbstractContainerMenu {
     private final List<? extends Container> members;
     private final int foodSlotCount;
 
+    public int getFoodSlotCount() { return foodSlotCount; }
+
     public HayFeederMenu(int containerId, Inventory playerInventory, List<? extends Container> members) {
         super(ModMenuTypes.HAY_FEEDER.get(), containerId);
         if (members.isEmpty()) throw new IllegalArgumentException("hay_feeder menu requires at least 1 member");
