@@ -121,7 +121,7 @@ public class HayFeederContentsRenderer
 
         // Main central cuboid (12x12 footprint, 2..14 on x/z).
         submitCuboid(poseStack, collector, top, side,
-                INSET, OPP, INSET, OPP, BASE_Y, topY, selfPx, tint, light);
+                INSET, OPP, INSET, OPP, BASE_Y, topY, tint, light);
 
         // Cardinal bridges: present iff that neighbour is a non-empty feeder.
         // Height is min(self, neighbour) so the bridge meets the neighbour's
@@ -165,7 +165,7 @@ public class HayFeederContentsRenderer
         if (px <= 0) return;
         float topY = BASE_Y + px / 16.0F;
         submitCuboid(poseStack, collector, top, side,
-                xMin, xMax, zMin, zMax, BASE_Y, topY, px, tint, light);
+                xMin, xMax, zMin, zMax, BASE_Y, topY, tint, light);
     }
 
     private void submitCorner(int cardinalA, int cardinalB, int diagonal, int selfPx,
@@ -180,15 +180,14 @@ public class HayFeederContentsRenderer
         if (px <= 0) return;
         float topY = BASE_Y + px / 16.0F;
         submitCuboid(poseStack, collector, top, side,
-                xMin, xMax, zMin, zMax, BASE_Y, topY, px, tint, light);
+                xMin, xMax, zMin, zMax, BASE_Y, topY, tint, light);
     }
 
     private static void submitCuboid(PoseStack poseStack, SubmitNodeCollector collector,
                                      TextureAtlasSprite top, TextureAtlasSprite side,
                                      float xMin, float xMax, float zMin, float zMax,
-                                     float yMin, float yMax, int heightPx,
+                                     float yMin, float yMax,
                                      int tint, int light) {
-        float fillFracV = heightPx / 16.0F;
         collector.submitCustomGeometry(
                 poseStack,
                 RenderTypes.entitySolid(top.atlasLocation()),
@@ -198,7 +197,7 @@ public class HayFeederContentsRenderer
                 poseStack,
                 RenderTypes.entitySolid(side.atlasLocation()),
                 (pose, buf) -> renderSides(pose, buf, side,
-                        xMin, xMax, zMin, zMax, yMin, yMax, fillFracV, tint, light));
+                        xMin, xMax, zMin, zMax, yMin, yMax, tint, light));
     }
 
     private static void renderTopAndBottom(PoseStack.Pose pose, VertexConsumer buf,
@@ -230,15 +229,17 @@ public class HayFeederContentsRenderer
                                     TextureAtlasSprite s,
                                     float xMin, float xMax, float zMin, float zMax,
                                     float yMin, float yMax,
-                                    float fillFracV, int color, int light) {
+                                    int color, int light) {
         float uX0 = s.getU(xMin);
         float uX1 = s.getU(xMax);
         float uZ0 = s.getU(zMin);
         float uZ1 = s.getU(zMax);
-        // V grows downward on textures, so V at top of cuboid is sampled higher,
-        // i.e. v0 = sprite top (offset 0), v1 = offset = fillFracV.
+        // Always show the full hay_block_side sprite (top binding -> hay -> bottom
+        // binding) on every face, regardless of how short the cuboid is. The texture
+        // is squeezed vertically at low fill, but both bindings stay visible so the
+        // shape always reads as a complete bale.
         float v0 = s.getV(0.0F);
-        float v1 = s.getV(fillFracV);
+        float v1 = s.getV(1.0F);
 
         // North face (-Z), normal -Z; vertices CCW seen from -Z
         addVertex(pose, buf, xMax, yMax, zMin, color, uX0, v0, light, 0, 0, -1);
