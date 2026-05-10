@@ -6,11 +6,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -116,6 +118,19 @@ public class HayFeederBlock extends Block implements EntityBlock {
         if (level.getBlockEntity(pos) instanceof HayFeederBlockEntity be) {
             be.tickFeeding(level, pos, state);
         }
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
+        if (level.getBlockEntity(pos) instanceof Container c) {
+            return AbstractContainerMenu.getRedstoneSignalFromContainer(c);
+        }
+        return 0;
     }
 
     @Override
