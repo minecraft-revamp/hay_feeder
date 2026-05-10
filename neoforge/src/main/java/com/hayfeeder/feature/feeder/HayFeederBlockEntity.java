@@ -30,7 +30,7 @@ import java.util.List;
 
 public class HayFeederBlockEntity extends BlockEntity implements Container, MenuProvider {
     public static final int CAPACITY = 64;
-    public static final double FEED_RADIUS = 6.0;
+    public static final double FEED_RADIUS = 2.0;
 
     private ItemStack contents = ItemStack.EMPTY;
     private int lastKnownCount = 0;
@@ -44,12 +44,12 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
     public void tickFeeding(ServerLevel level, BlockPos pos, BlockState state) {
         if (contents.isEmpty()) return;
         AABB box = AABB.ofSize(pos.getCenter(), FEED_RADIUS * 2, FEED_RADIUS * 2, FEED_RADIUS * 2);
-        List<Animal> targets = level.getEntitiesOfClass(Animal.class, box,
-                a -> a.isAlive() && a.isFood(contents));
-        if (targets.isEmpty()) return;
-        for (Animal a : targets) {
-            FeedingMechanic.feedAnimal(level, a);
-        }
+        Animal target = level.getEntitiesOfClass(Animal.class, box,
+                a -> a.isAlive() && a.isFood(contents) && canBenefit(a)).stream()
+                .min(java.util.Comparator.comparingDouble(a -> a.distanceToSqr(pos.getCenter())))
+                .orElse(null);
+        if (target == null) return;
+        FeedingMechanic.feedAnimal(level, target);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER,
                 pos.getX() + 0.5, pos.getY() + 1.05, pos.getZ() + 0.5,
                 5, 0.2, 0.05, 0.2, 0.0);
@@ -57,6 +57,11 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
                 SoundSource.BLOCKS, 0.3f, 1.0f);
         contents.shrink(1);
         syncToWorld();
+    }
+
+    /** Adult animals only follow / consume when they can actually benefit (breedable or growing). */
+    static boolean canBenefit(Animal a) {
+        return a.isBaby() || a.canFallInLove();
     }
 
     // --- Container ---------------------------------------------------------

@@ -1,5 +1,6 @@
 package com.hayfeeder;
 
+import com.hayfeeder.feature.feeder.AnimalGoalRegistration;
 import com.hayfeeder.registry.ModBlockEntities;
 import com.hayfeeder.registry.ModBlocks;
 import com.hayfeeder.registry.ModCreativeTabs;
@@ -9,6 +10,7 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
 @Mod(HayFeeder.MOD_ID)
@@ -22,6 +24,8 @@ public class HayFeeder {
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+
+        NeoForge.EVENT_BUS.register(AnimalGoalRegistration.class);
 
         LOGGER.info("Hay Feeder initialised");
     }

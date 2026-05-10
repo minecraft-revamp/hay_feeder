@@ -1,0 +1,6 @@
+accessWidener	v2	official
+
+# Mob.goalSelector is protected in vanilla; NeoForge auto-widens it to public.
+# Fabric needs an explicit widener so we can register FollowFeederGoal from
+# our HayFeederFabric ENTITY_LOAD listener (a different package than Mob).
+accessible	field	net/minecraft/world/entity/Mob	goalSelector	Lnet/minecraft/world/entity/ai/goal/GoalSelector;

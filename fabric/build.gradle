@@ -10,6 +10,13 @@ base.archivesName = "${mod_id}-fabric"
 // Mojang ships Java 25 to end users in 26.1.2, so mods must target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+loom {
+    // Widen Mob.goalSelector so HayFeederFabric can attach FollowFeederGoal
+    // from a different package. NeoForge auto-widens this; vanilla Fabric
+    // doesn't, hence the explicit AW.
+    accessWidenerPath = file('src/main/resources/hay_feeder.accesswidener')
+}
+
 repositories {
     // Add any extra repositories here
 }
