@@ -2,5 +2,6 @@
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "먹이통",
   "item.hay_feeder.hay_feeder": "먹이통",
-  "container.hay_feeder.hay_feeder": "먹이통"
+  "container.hay_feeder.hay_feeder": "먹이통",
+  "entity.hay_feeder.villager.rancher": "목축업자"
 }

@@ -6,6 +6,8 @@ import com.hayfeeder.registry.ModBlocks;
 import com.hayfeeder.registry.ModCreativeTabs;
 import com.hayfeeder.registry.ModItems;
 import com.hayfeeder.registry.ModMenuTypes;
+import com.hayfeeder.registry.ModPoiTypes;
+import com.hayfeeder.registry.ModVillagerProfessions;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -25,6 +27,10 @@ public class HayFeederFabric implements ModInitializer {
         ModBlockEntities.bootstrap();
         ModMenuTypes.bootstrap();
         ModCreativeTabs.bootstrap();
+        // PoI must precede VillagerProfession because the profession
+        // workstation predicate dereferences ModPoiTypes.HAY_FEEDER_KEY.
+        ModPoiTypes.bootstrap();
+        ModVillagerProfessions.bootstrap();
 
         // Inject FollowFeederGoal into every Animal that loads on the server.
         // Priority 3 sits above LookAt (8) and Wander (7), below Panic (1) and TemptGoal (2).

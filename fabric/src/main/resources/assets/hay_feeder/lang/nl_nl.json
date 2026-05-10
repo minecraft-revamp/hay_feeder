@@ -2,5 +2,6 @@
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "Voederbak",
   "item.hay_feeder.hay_feeder": "Voederbak",
-  "container.hay_feeder.hay_feeder": "Voederbak"
+  "container.hay_feeder.hay_feeder": "Voederbak",
+  "entity.hay_feeder.villager.rancher": "Veehouder"
 }

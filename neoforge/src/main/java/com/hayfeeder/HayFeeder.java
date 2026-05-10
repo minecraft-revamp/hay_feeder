@@ -6,6 +6,8 @@ import com.hayfeeder.registry.ModBlocks;
 import com.hayfeeder.registry.ModCreativeTabs;
 import com.hayfeeder.registry.ModItems;
 import com.hayfeeder.registry.ModMenuTypes;
+import com.hayfeeder.registry.ModPoiTypes;
+import com.hayfeeder.registry.ModVillagerProfessions;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -24,6 +26,8 @@ public class HayFeeder {
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        ModPoiTypes.POI_TYPES.register(modEventBus);
+        ModVillagerProfessions.PROFESSIONS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(AnimalGoalRegistration.class);
 

@@ -2,5 +2,6 @@
   "itemGroup.hay_feeder.main": "Hay Feeder",
   "block.hay_feeder.hay_feeder": "Yemlik",
   "item.hay_feeder.hay_feeder": "Yemlik",
-  "container.hay_feeder.hay_feeder": "Yemlik"
+  "container.hay_feeder.hay_feeder": "Yemlik",
+  "entity.hay_feeder.villager.rancher": "Hayvancı"
 }
