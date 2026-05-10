@@ -115,7 +115,12 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
             }
             if (newCount != lastKnownCount) {
                 BlockPos pos = getBlockPos();
-                Block block = getBlockState().getBlock();
+                BlockState state = getBlockState();
+                Block block = state.getBlock();
+                // Push a BE update packet so the client BER sees the new count.
+                // Required for top-ups via slot.grow(n) which never call setItem
+                // and therefore never reach syncToWorld.
+                level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
                 // Comparator-aware update (also walks 1 block through conductors).
                 level.updateNeighbourForOutputSignal(pos, block);
                 // Direct-signal update so adjacent wires/lamps recompute power.
