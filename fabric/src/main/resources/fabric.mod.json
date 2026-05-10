@@ -9,8 +9,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "main":   ["com.hayfeeder.fabric.HayFeederFabric"],
-    "client": ["com.hayfeeder.fabric.client.HayFeederFabricClient"]
+    "main":   ["com.hayfeeder.HayFeederFabric"],
+    "client": ["com.hayfeeder.client.HayFeederFabricClient"]
   },
 
   "depends": {
