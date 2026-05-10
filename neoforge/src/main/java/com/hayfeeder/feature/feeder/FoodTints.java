@@ -20,6 +20,7 @@ public final class FoodTints {
     private static final Map<Item, Integer> TINTS = Map.ofEntries(
             Map.entry(Items.WHEAT,         0xFFFFFFFF),  // default yellow hay
             Map.entry(Items.CARROT,        0xFFFF9040),  // orange
+            Map.entry(Items.POTATO,        0xFFC09060),  // tan/brown
             Map.entry(Items.BEETROOT,      0xFFD04040),  // deep red
             Map.entry(Items.WHEAT_SEEDS,   0xFFE0E090),  // pale yellow-green
             Map.entry(Items.MELON_SEEDS,   0xFFB0C060),  // green-tan

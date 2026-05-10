@@ -89,10 +89,17 @@ public class HayFeederMenu extends AbstractContainerMenu {
     }
 
     /**
-     * Single-feeder slot: capacity 64 (one feeder's CAPACITY). The constraint that a feeder
-     * holds only one food type at a time lives on HayFeederBlockEntity.canPlaceItem and is
-     * applied via Slot.mayPlace's default delegation. No cross-feeder constraint — adjacent
-     * feeders in the same group may freely hold different food types.
+     * Single-feeder slot: capacity 64 (one feeder's CAPACITY).
+     *
+     * Constraints applied directly here (rather than only delegating to container.canPlaceItem):
+     * 1. Item must be in AcceptedFoods (livestock food whitelist) — otherwise reject.
+     * 2. If the slot already has contents, incoming must match the type — single-type-per-feeder.
+     *
+     * Doing the checks at the slot level (instead of relying on canPlaceItem alone) avoids a
+     * client/server desync: client-side, the slot wraps a dummy SimpleContainer whose default
+     * canPlaceItem returns true for anything, which would let the client visually predict
+     * placing planks before the server rejects. With explicit checks in mayPlace, both sides
+     * agree immediately — no desync flicker, no chance for a non-food item to slip through.
      */
     private static class HayFeederFoodSlot extends Slot {
         HayFeederFoodSlot(Container container, int slot, int x, int y) {
@@ -101,5 +108,12 @@ public class HayFeederMenu extends AbstractContainerMenu {
 
         @Override
         public int getMaxStackSize() { return HayFeederBlockEntity.CAPACITY; }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            if (!AcceptedFoods.isAccepted(stack)) return false;
+            ItemStack current = container.getItem(getContainerSlot());
+            return current.isEmpty() || current.is(stack.getItem());
+        }
     }
 }
