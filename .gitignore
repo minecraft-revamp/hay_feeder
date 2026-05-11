@@ -34,3 +34,6 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+
+# Blockbench design files (autosave backups, project files)
+.design/
