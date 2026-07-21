@@ -79,7 +79,7 @@ public class HayFeederContentsRenderer
         // black sitting inside an opaque hay-coloured volume.
         if (be.getLevel() != null) {
             BlockPos above = be.getBlockPos().above();
-            state.packedLightAbove = LevelRenderer.getLightCoords(be.getLevel(), above);
+            state.packedLightAbove = LevelRenderer.getLightCoords(LevelRenderer.BrightnessGetter.DEFAULT, be.getLevel(), be.getLevel().getBlockState(above), above);
         } else {
             state.packedLightAbove = state.lightCoords;
         }
