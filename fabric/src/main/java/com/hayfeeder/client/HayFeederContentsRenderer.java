@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -79,7 +81,10 @@ public class HayFeederContentsRenderer
         // black sitting inside an opaque hay-coloured volume.
         if (be.getLevel() != null) {
             BlockPos above = be.getBlockPos().above();
-            state.packedLightAbove = LevelRenderer.getLightCoords(LevelRenderer.BrightnessGetter.DEFAULT, be.getLevel(), be.getLevel().getBlockState(above), above);
+            var level = be.getLevel();
+            int blockLight = level.getBrightness(LightLayer.BLOCK, above);
+            int skyLight = level.getBrightness(LightLayer.SKY, above);
+            state.packedLightAbove = LightCoordsUtil.pack(blockLight, skyLight);
         } else {
             state.packedLightAbove = state.lightCoords;
         }
