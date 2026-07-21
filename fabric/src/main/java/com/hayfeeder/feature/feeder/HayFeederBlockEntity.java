@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -43,10 +44,11 @@ public class HayFeederBlockEntity extends BlockEntity implements Container, Menu
 
     public void tickFeeding(ServerLevel level, BlockPos pos, BlockState state) {
         if (contents.isEmpty()) return;
-        AABB box = AABB.ofSize(pos.getCenter(), FEED_RADIUS * 2, FEED_RADIUS * 2, FEED_RADIUS * 2);
+        Vec3 center = Vec3.atCenterOf(pos);
+        AABB box = AABB.ofSize(center, FEED_RADIUS * 2, FEED_RADIUS * 2, FEED_RADIUS * 2);
         Animal target = level.getEntitiesOfClass(Animal.class, box,
                 a -> a.isAlive() && a.isFood(contents) && canBenefit(a)).stream()
-                .min(java.util.Comparator.comparingDouble(a -> a.distanceToSqr(pos.getCenter())))
+                .min(java.util.Comparator.comparingDouble(a -> a.distanceToSqr(center)))
                 .orElse(null);
         if (target == null) return;
         FeedingMechanic.feedAnimal(level, target);
