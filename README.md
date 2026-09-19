@@ -3,11 +3,11 @@
 A wood-and-iron feeding trough that feeds nearby wheat-eaters, carrot-pigs, seed-chickens and more — passively, on its own schedule. Place it, fill it once, walk away. 30 language translations included.
 
 [![Build](https://github.com/minecraft-revamp/hay_feeder/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/minecraft-revamp/hay_feeder/actions/workflows/build-and-test.yml)
-[![Minecraft](https://img.shields.io/badge/Minecraft-26.1.2-62B132?logo=minecraft&logoColor=white)](https://www.minecraft.net/)
-[![NeoForge](https://img.shields.io/badge/NeoForge-26.1.2.41--beta-D7742F)](https://neoforged.net/)
-[![Fabric](https://img.shields.io/badge/Fabric-0.148.0%2B26.1.2-DBD0B4)](https://fabricmc.net/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.3-62B132?logo=minecraft&logoColor=white)](https://www.minecraft.net/)
+[![NeoForge](https://img.shields.io/badge/NeoForge-26.3.0.4--beta-D7742F)](https://neoforged.net/)
+[![Fabric](https://img.shields.io/badge/Fabric-0.161.0%2B26.3-DBD0B4)](https://fabricmc.net/)
 
-> ⚠️ Targets **Minecraft 26.1.2**, the first post-deobfuscation snapshot. Won't load on earlier versions.
+> ⚠️ Targets **Minecraft 26.3**. Won't load on earlier versions.
 
 ## Status
 
@@ -107,10 +107,10 @@ Shaped: **5 wooden slabs + 2 iron ingots**. Any wooden slab works (`#minecraft:w
 ## Install
 
 1. Install the launcher of your choice (recommended: [Prism Launcher](https://prismlauncher.org/))
-2. Create a Minecraft **26.1.2** instance with **NeoForge** `26.1.2.41-beta` (Fabric port still in progress).
+2. Create a Minecraft **26.3** instance with **NeoForge** `26.3.0.4-beta` or **Fabric** Loader `0.19.5` + API `0.161.0+26.3`.
 3. Drop the JAR from [releases](../../releases) into the instance's `mods/` folder:
-   - `hay_feeder-0.1.0.jar` for NeoForge
-   - `hay_feeder-fabric-0.1.0.jar` for Fabric *(coming)*
+   - `hay_feeder-0.1.1+mc26.3.jar` for NeoForge
+   - `hay_feeder-fabric-0.1.1+mc26.3.jar` for Fabric
 
 ## Build from source
 
@@ -120,12 +120,12 @@ Two self-contained Gradle projects, one per loader.
 # NeoForge — needs Java 21 (auto-fetches Java 25 toolchain)
 cd neoforge
 JAVA_HOME=$HOME/.local/jdks/current ./gradlew build
-# → neoforge/build/libs/hay_feeder-0.1.0.jar
+# → neoforge/build/libs/hay_feeder-0.1.1+mc26.3.jar
 
 # Fabric — needs Java 25 (Loom is strict)
 cd fabric
 JAVA_HOME=$HOME/.local/jdks/current25 ./gradlew build
-# → fabric/build/libs/hay_feeder-fabric-0.1.0.jar
+# → fabric/build/libs/hay_feeder-fabric-0.1.1+mc26.3.jar
 ```
 
 `./gradlew runClient` from either subdir to launch a dev client.
@@ -134,13 +134,13 @@ JAVA_HOME=$HOME/.local/jdks/current25 ./gradlew build
 
 ```
 hay_feeder/
-├── neoforge/    NeoGradle 7 project, NeoForge 26.1.2.41-beta — feature-complete
-├── fabric/      Loom 1.16.1 project, Fabric 0.148.0+26.1.2 — scaffold
+├── neoforge/    NeoGradle 7.1.39 project, NeoForge 26.3.0.4-beta — feature-complete
+├── fabric/      Loom 1.17.11 project, Fabric 0.161.0+26.3 — feature-complete
 ├── CLAUDE.md    Per-mod design notes and iteration log
 └── README.md    You are here
 ```
 
-Two-loader-side-by-side, no Architectury — same convention as the rest of the [Minecraft Revamp collective](../README.md). See [`../buckets_update/CLAUDE.md`](../buckets_update/CLAUDE.md) for cross-loader API differences and MC 26.1 post-deobfuscation gotchas.
+Two-loader-side-by-side, no Architectury — same convention as the rest of the [Minecraft Revamp collective](../README.md). See [`../buckets_update/CLAUDE.md`](../buckets_update/CLAUDE.md) for cross-loader API differences and MC 26.3 migration notes.
 
 ## Roadmap
 

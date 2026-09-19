@@ -4,7 +4,7 @@
 
 **Status: scaffold + Q2 wiring.** Two-loader project tree is in place, the `hay_feeder` block is registered with a `feeds_left` blockstate (0–8), creative tab carries it, and placeholder visuals inherit `minecraft:block/hay_block`. **No feeding logic yet** — Q1 (target entities) and Q3 (tick cadence) still need brainstorming before the mod actually does anything.
 
-> Most cross-cutting context (MC 26.1.2 post-deobfuscation gotchas, NeoForge patches absent in vanilla Fabric, build/run command shapes, user environment) lives in [`../buckets_update/CLAUDE.md`](../buckets_update/CLAUDE.md) and [`../CLAUDE.md`](../CLAUDE.md). This file only covers what's specific to hay_feeder — read those first.
+> Most cross-cutting context (MC 26.3 migration notes, NeoForge patches absent in vanilla Fabric, build/run command shapes, user environment) lives in [`../buckets_update/CLAUDE.md`](../buckets_update/CLAUDE.md) and [`../CLAUDE.md`](../CLAUDE.md). This file only covers what's specific to hay_feeder — read those first.
 
 ## Vision
 
@@ -77,7 +77,7 @@ Resources (mirrored both loaders, `assets/hay_feeder/`):
 - `blockstates/hay_feeder.json` — 9 variants of `feeds_left`, all currently mapped to the same model (placeholder)
 - `models/block/hay_feeder.json` — `parent: minecraft:block/hay_block` (visual placeholder until per-stage textures land)
 - `models/item/hay_feeder.json` — `parent: hay_feeder:block/hay_feeder`
-- `items/hay_feeder.json` — MC 26.1 item-definition pointing at the item model
+- `items/hay_feeder.json` — MC 26.x item-definition pointing at the item model
 - `lang/en_us.json` — `itemGroup.hay_feeder.main` + `block.hay_feeder.hay_feeder`
 
 When real per-stage textures are ready: split `models/block/hay_feeder.json` into 9 model files (or fewer if some stages share a texture) and update `blockstates/hay_feeder.json` to point each `feeds_left=N` variant at the appropriate model.
@@ -92,16 +92,47 @@ Same shape as the rest of the collective:
 
 | Command | Where | Java |
 |---|---|---|
-| `./gradlew build` | `neoforge/` | **21** |
-| `./gradlew runClient` | `neoforge/` | **21** |
-| `./gradlew build` | `fabric/` | **25** |
-| `./gradlew runClient` | `fabric/` | **25** |
+| `gradlew.bat build` (Windows shell) | `neoforge/` | **21** (NeoGradle auto-fetches the 25 toolchain) |
+| `gradlew.bat runClient` (Windows shell) | `neoforge/` | **21** |
+| `gradlew.bat build` (Windows shell) | `fabric/` | **25** (Loom is strict) |
+| `gradlew.bat runClient` (Windows shell) | `fabric/` | **25** |
 
-JDK toolchains: `~/.local/jdks/current` (21) and `~/.local/jdks/current25` (25).
+**Run both loaders natively on Windows, not from WSL.** The repo lives under `/mnt/c`; WSL2's 9p bridge makes NeoGradle's tens of thousands of small file operations pathologically slow (an identical build took ~1h49 under WSL vs <6 min as a native Windows process). From WSL, invoke the Windows shell explicitly:
+
+```bash
+cmd.exe /c "cd /d <path-to-checkout>\\neoforge && gradlew.bat --no-daemon check build"
+```
+
+JDK toolchains (Linux side): `~/.local/jdks/current` (21) and `~/.local/jdks/current25` (25); the Windows side runs Temurin 25 from `JAVA_HOME`.
 
 JAR outputs:
-- `neoforge/build/libs/hay_feeder-0.1.0.jar`
-- `fabric/build/libs/hay_feeder-fabric-0.1.0.jar`
+- `neoforge/build/libs/hay_feeder-0.1.1+mc26.3.jar`
+- `fabric/build/libs/hay_feeder-fabric-0.1.1+mc26.3.jar`
+
+## MC 26.3 migration notes
+
+Target is **Minecraft 26.3** on both loaders. The port needed **exactly one Java change**: `Items.WHITE_WOOL` no longer exists in 26.3 (the 16 wool items are grouped as `Items.WOOL`, a `ColorCollection<Item>`) — replaced with `Items.WOOL.white()` in `RancherTrades.java` (both loaders). Every other vanilla / NeoForge / Fabric API symbol this mod touches (`Block#useItemOn`/`useWithoutItem`/`updateShape`, `BlockEntity#loadAdditional`/`saveAdditional`, the `SubmitNodeCollector` / `BlockEntityRenderState` / `SpriteGetter` render path, `LightCoordsUtil#pack`, `DeferredRegister`, `GameData#getBlockStatePointOfInterestTypeMap`, `RegisterMenuScreensEvent`, `ServerEntityEvents.ENTITY_LOAD`, …) is signature-identical between 26.1.2 and 26.3. What changed is the toolchain, the pack format, and one data-driven schema:
+
+| Component | Was (26.1.2) | Now (26.3) |
+|---|---|---|
+| Minecraft | 26.1.2 | 26.3 |
+| NeoForge | 26.1.2.41-beta | 26.3.0.4-beta |
+| NeoGradle (`net.neoforged.gradle.userdev`) | 7.1.26 | **7.1.39** — required, not optional: 7.1.38 fails to build against 26.3 (stale bundled access transformer on `HolderSet$1.contents()`) |
+| Fabric Loader | 0.18.4 | 0.19.5 |
+| Fabric API | 0.148.0+26.1.2 | 0.161.0+26.3 |
+| Fabric Loom | 1.16.1 | 1.17.11 — the 26.3 porting guide requires ≥1.17 |
+| Fabric Gradle wrapper | 9.4.0 | 9.6.0 (the NeoForge wrapper stays 9.2.1) |
+| data pack format | `min_format [101,1]` / `max_format 101` | `[121,0]` / `121` — read from the real `version.json` inside the 26.3 `minecraft-client.jar`; the resource pack format is separately numbered (97.1) and this repo's `pack.mcmeta` has always tracked the data format |
+
+### 26.3 data-driven gotcha: villager trade number providers
+
+In 26.3, `VillagerTrade`'s `max_uses`/`xp`, `TradeCost`'s `count` and `TradeSet`'s `amount` changed from `NumberProvider` to `Holder<ContextIntProvider>` (and `reputation_discount` to `Holder<ContextFloatProvider>`). Vanilla datagen now emits **ints** (`2`, `12`) where 26.1.2 emitted floats (`2.0`, `12.0`). Our `villager_trade` / `trade_set` JSONs were normalised to the 26.3 int shape (all keys otherwise unchanged) and `tests/validate.py` **L1.6** now enforces it. `reputation_discount` stays a float (e.g. `0.05`).
+
+### 26.3 registry gotcha: colored items became `ColorCollection`s
+
+`Items.WHITE_WOOL` (and the other 15 wool constants) are gone. 26.3 groups them as `Items.WOOL`, a `net.minecraft.world.level.block.ColorCollection<Item>` with per-colour accessors — `Items.WOOL.white()`, or `Items.WOOL.pick(DyeColor.WHITE)`. Same shape as `Blocks.WOOL` / `WOOL_STAIRS` / `WOOL_SLAB` and the copper weathering collections. Registry **IDs** are unchanged (`minecraft:white_wool`), so the datapack JSON needed no edit — only the Java constant.
+
+> The 26.3 `recipe_crafted` advancement trigger rename (`recipe_id` → `recipes`) documented in `../buckets_update/CLAUDE.md` does **not** apply here: hay_feeder ships no advancements.
 
 ## Tooling note
 

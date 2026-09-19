@@ -2,11 +2,11 @@
   "gives": {
     "id": "minecraft:emerald"
   },
-  "max_uses": 16.0,
+  "max_uses": 16,
   "reputation_discount": 0.05,
   "wants": {
     "id": "minecraft:hay_block",
-    "count": 14.0
+    "count": 14
   },
-  "xp": 5.0
+  "xp": 5
 }

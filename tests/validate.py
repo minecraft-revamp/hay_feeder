@@ -8,10 +8,11 @@ Checks
 ------
 L1.1  All JSON files under src/main/resources/ parse cleanly
 L1.2  Language files have consistent keys (vs en_us)
-L1.3  pack.mcmeta has the MC 26.1 format (min_format[2], max_format)
+L1.3  pack.mcmeta has the MC 26.3 format (min_format[2], max_format)
 L1.4  Model JSONs reference existing texture / parent files (mod refs only —
       vanilla `minecraft:` refs are skipped, not failed)
 L1.5  Recipes have valid shape / keys / result
+L1.6  Villager trade JSONs use the MC 26.3 numeric shape (int providers are ints)
 
 Exit code 0 = all pass, 1 = any fail.
 
@@ -91,7 +92,7 @@ def check_lang_consistency(loader_root: Path) -> None:
 # ----- L1.3: pack.mcmeta format ---------------------------------------------
 
 def check_pack_mcmeta(loader_root: Path) -> None:
-    print(f"  L1.3  pack.mcmeta MC 26.1 format")
+    print(f"  L1.3  pack.mcmeta MC 26.3 format")
     mcmeta = loader_root / "src/main/resources/pack.mcmeta"
     if not mcmeta.exists():
         fail("missing pack.mcmeta")
@@ -190,10 +191,40 @@ def check_recipes(loader_root: Path) -> None:
             fail(f"{rel}: result missing 'id'")
 
 
+# ----- L1.6: villager trade numeric shape (MC 26.3) --------------------------
+
+def check_trade_json_shapes(loader_root: Path) -> None:
+    print(f"  L1.6  Villager trade JSONs use the MC 26.3 numeric shape")
+    data_root = loader_root / "src/main/resources/data"
+    if not data_root.exists():
+        return
+    paths = sorted(list(data_root.rglob("villager_trade/**/*.json"))
+                   + list(data_root.rglob("trade_set/**/*.json")))
+    for path in paths:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue  # already flagged in L1.1
+        if not isinstance(data, dict):
+            continue
+        rel = path.relative_to(loader_root)
+        # MC 26.3 moved these to Holder<ContextIntProvider>: vanilla datagen
+        # emits ints, so keep ours integral too.
+        for key in ("max_uses", "xp", "amount"):
+            if key in data and not isinstance(data[key], int):
+                fail(f"{rel}: '{key}' must be an int on MC 26.3, got {data[key]!r}")
+        wants = data.get("wants")
+        if isinstance(wants, dict) and "count" in wants and not isinstance(wants["count"], int):
+            fail(f"{rel}: 'wants.count' must be an int on MC 26.3, got {wants['count']!r}")
+        # reputation_discount is a Holder<ContextFloatProvider>: floats stay floats.
+        if "reputation_discount" in data and not isinstance(data["reputation_discount"], (int, float)):
+            fail(f"{rel}: 'reputation_discount' must be numeric, got {data['reputation_discount']!r}")
+
+
 # ----- driver ----------------------------------------------------------------
 
 CHECKS = [check_json_parses, check_lang_consistency, check_pack_mcmeta,
-          check_model_refs, check_recipes]
+          check_model_refs, check_recipes, check_trade_json_shapes]
 
 
 def main(argv: List[str]) -> int:

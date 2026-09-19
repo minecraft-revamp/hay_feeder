@@ -48,7 +48,7 @@ public final class RancherTrades {
             // Journeyman — buy raw leather, sell premium animal products.
             new Trade(Items.LEATHER,  8, Items.EMERALD,     1, 16, 20),
             new Trade(Items.EMERALD,  4, Items.MILK_BUCKET, 1,  4, 30),
-            new Trade(Items.EMERALD,  6, Items.WHITE_WOOL,  1,  8, 30));
+            new Trade(Items.EMERALD,  6, Items.WOOL.white(),  1,  8, 30));
 
     public static final List<Trade> LEVEL_4 = List.of(
             // Expert — transport & feather drops.

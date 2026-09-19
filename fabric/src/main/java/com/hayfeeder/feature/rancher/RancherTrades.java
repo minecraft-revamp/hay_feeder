@@ -45,7 +45,7 @@ public final class RancherTrades {
     public static final List<Trade> LEVEL_3 = List.of(
             new Trade(Items.LEATHER,  8, Items.EMERALD,     1, 16, 20),
             new Trade(Items.EMERALD,  4, Items.MILK_BUCKET, 1,  4, 30),
-            new Trade(Items.EMERALD,  6, Items.WHITE_WOOL,  1,  8, 30));
+            new Trade(Items.EMERALD,  6, Items.WOOL.white(),  1,  8, 30));
 
     public static final List<Trade> LEVEL_4 = List.of(
             new Trade(Items.EMERALD,  8, Items.LEAD,    1,  6, 30),

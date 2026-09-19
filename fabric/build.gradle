@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.16.1'
+    id 'net.fabricmc.fabric-loom' version '1.17.11'
     id 'maven-publish'
 }
 
@@ -7,7 +7,7 @@ version = mod_version
 group = mod_group_id
 base.archivesName = "${mod_id}-fabric"
 
-// Mojang ships Java 25 to end users in 26.1.2, so mods must target Java 25.
+// Mojang ships Java 25 to end users in 26.x, so mods must target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 loom {
