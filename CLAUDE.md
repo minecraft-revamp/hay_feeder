@@ -2,7 +2,7 @@
 
 **Local path:** `<repo>/` (sibling of `buckets_update/` and other mods in the [Minecraft Revamp collective](../CLAUDE.md)).
 
-**Status: scaffold + Q2 wiring.** Two-loader project tree is in place, the `hay_feeder` block is registered with a `feeds_left` blockstate (0–8), creative tab carries it, and placeholder visuals inherit `minecraft:block/hay_block`. **No feeding logic yet** — Q1 (target entities) and Q3 (tick cadence) still need brainstorming before the mod actually does anything.
+**Status: feature-complete on both loaders, targeting Minecraft 26.3.** The `hay_feeder` block is a connected, block-entity-backed trough: adjacent feeders share one inventory (one 64-item slot per cell), the stored food is rendered live by a block-entity renderer and tinted per food type, and the block emits redstone proportional to fill (comparator and direct signal). Feeding runs in two halves — `FollowFeederGoal`, injected into every `Animal`, walks animals to the trough, and `HayFeederBlockEntity#tickFeeding` on the block's random tick consumes exactly one item per animal that arrives. A data-driven `hay_feeder:rancher` villager profession (PoI + five trade levels) makes the feeder a workstation. Fabric mirrors the NeoForge feature set; 30 language files ship on both loaders.
 
 > Most cross-cutting context (MC 26.3 migration notes, NeoForge patches absent in vanilla Fabric, build/run command shapes, user environment) lives in [`../buckets_update/CLAUDE.md`](../buckets_update/CLAUDE.md) and [`../CLAUDE.md`](../CLAUDE.md). This file only covers what's specific to hay_feeder — read those first.
 
@@ -136,7 +136,7 @@ In 26.3, `VillagerTrade`'s `max_uses`/`xp`, `TradeCost`'s `count` and `TradeSet`
 
 ## Tooling note
 
-`buckets_update/` ships a Python resource validator (`tests/validate.py`) wired into `./gradlew check`. That script is hardcoded to the `buckets_update` namespace — it was **not** vendored into hay_feeder. The `validateResources` Gradle task slot is reserved in `neoforge/build.gradle` for when a mod-agnostic linter exists. Until then, `./gradlew check` runs JUnit tests only.
+`tests/validate.py` is this repo's own resource validator, wired onto `./gradlew check` by the `validateResources` task in **both** `fabric/build.gradle` and `neoforge/build.gradle` (each passes its own loader root, so the two trees are linted separately). It runs in <1s and covers: JSON well-formedness, lang-key consistency against `en_us`, `pack.mcmeta` shape, model → texture/parent references, recipe shape, and the MC 26.3 villager-trade numeric shape (**L1.6**). The module docstring lists every check.
 
 ## Iteration pointers
 
