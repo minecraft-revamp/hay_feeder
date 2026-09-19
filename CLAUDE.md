@@ -1,6 +1,6 @@
 # Hay Feeder — repo guide for AI iteration
 
-**Local path:** `<repo>/` (sibling of `buckets_update/` and other mods in the [Minecraft Revamp collective](../CLAUDE.md)).
+**Layout:** two self-contained Gradle projects — `neoforge/` and `fabric/` — with resources duplicated by hand, plus `tests/` for the Python resource validator. Sibling mods live in the wider [Minecraft Revamp collective](../CLAUDE.md).
 
 **Status: feature-complete on both loaders, targeting Minecraft 26.3.** The `hay_feeder` block is a connected, block-entity-backed trough: adjacent feeders share one inventory (one 64-item slot per cell), the stored food is rendered live by a block-entity renderer and tinted per food type, and the block emits redstone proportional to fill (comparator and direct signal). Feeding runs in two halves — `FollowFeederGoal`, injected into every `Animal`, walks animals to the trough, and `HayFeederBlockEntity#tickFeeding` on the block's random tick consumes exactly one item per animal that arrives. A data-driven `hay_feeder:rancher` villager profession (PoI + five trade levels) makes the feeder a workstation. Fabric mirrors the NeoForge feature set; 30 language files ship on both loaders.
 
@@ -97,13 +97,13 @@ Same shape as the rest of the collective:
 | `gradlew.bat build` (Windows shell) | `fabric/` | **25** (Loom is strict) |
 | `gradlew.bat runClient` (Windows shell) | `fabric/` | **25** |
 
-**Run both loaders natively on Windows, not from WSL.** The repo lives under `/mnt/c`; WSL2's 9p bridge makes NeoGradle's tens of thousands of small file operations pathologically slow (an identical build took ~1h49 under WSL vs <6 min as a native Windows process). From WSL, invoke the Windows shell explicitly:
+**Build from a native shell if the checkout sits on a Windows drive.** When the repo is reached through WSL2's 9p bridge (`/mnt/c`, `drvfs`), run the Gradle wrapper as a native Windows process rather than under WSL: 9p adds a translation layer to every file operation, which makes NeoGradle's tens of thousands of small writes pathologically slow (an identical build took ~1h49 under WSL vs <6 min natively). From WSL, launch the Windows wrapper explicitly, pointing it at your own checkout:
 
 ```bash
-cmd.exe /c "cd /d <path-to-checkout>\\neoforge && gradlew.bat --no-daemon check build"
+cmd.exe /c "cd /d <path-to-checkout>\neoforge && gradlew.bat --no-daemon check build"
 ```
 
-JDK toolchains (Linux side): `~/.local/jdks/current` (21) and `~/.local/jdks/current25` (25); the Windows side runs Temurin 25 from `JAVA_HOME`.
+JDK toolchains: NeoForge runs on **21** (NeoGradle fetches the 25 toolchain via Foojay); Fabric needs **25** (Loom is strict).
 
 JAR outputs:
 - `neoforge/build/libs/hay_feeder-0.1.1+mc26.3.jar`
